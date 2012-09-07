@@ -56,13 +56,17 @@ function X(w,c,h,e,S,s) {
                     r = I[p];
                     if (!w | p == w) {
                         g = (q | p + a - S) ? 0 : S;
-                        if (!r&(!!q|A<3||!!g)||(r+1&z^y)>9&&q|A>2) {
-                            if (m=!(r-2&7))
-                                return y^=8,I[G--]=O,K;
-                            J=n=o&z;
-                            E=I[p-a]&z;
-                            t=q|E-7?n:(n+=2,6^y);
-                            while (n<=t) {
+                        if ((!r & (!!q | A<3 || !!g)) || ((r+1&z^y)>9 && (q | A>2))) {
+                            m = !(r - 2 & 7);
+                            if (m) {
+                                y ^= 8;
+                                I[G--] = O;
+                                return K;
+                            }
+                            J = n = o & z;
+                            E = I[p - a] & z;
+                            t = (q | E-7) ? n : (n+=2,6^y);
+                            while (n <= t) {
                                 L=r?l[r&7|32]-h-q:0;
                                 if (s)
                                     L+=(1-q?l[(p-p%x)/x+37]-l[(O-O%x)/x+37]+
