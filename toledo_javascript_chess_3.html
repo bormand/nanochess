@@ -139,6 +139,7 @@ function CreateChessboardView() {
 
 function DrawPieces() {
     var pieces = "\xa0\u265f\u265a\u265e\u265d\u265c\u265b  \u2659\u2654\u2658\u2657\u2656\u2655";
+    var p, q;
     B=b;
     for (p=21; p<99; ++p) {
         if (q = document.getElementById("o" + p)) {
