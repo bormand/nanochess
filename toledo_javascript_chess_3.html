@@ -43,16 +43,17 @@ function X(w,c,h,e,S,s) {
     G++;
     d = w || (s && s>=h && X(0,0,0,21,0,0) > M);
     do {
-        p = O;
-        o = I[p];
+        p = O; // current position
+        o = I[p]; // current piece code (or'ed with 16) or 0
         if (o) {
-            q = o & z ^ y;
+            q = o & z ^ y; // current piece code (1..6 for current player, 9..15 for opponent)
             if (q < 7) {
-                A = (q-- & 2) ? 8 : 4;
-                C = ((o-9) & z) ? [53,47,61,51,47,47][q] : 57;
+                A = (q-- & 2) ? 8 : 4; // possible moves (8 for queen, king, knight)
+                C = ((o-9) & z) ? [53,47,61,51,47,47][q] : 57; // offset of possible moves
+                // for each possible move ...
                 do {
-                    p += l[C];
-                    r = I[p];
+                    p += l[C]; // target cell position
+                    r = I[p]; // piece code at the target cell
                     if (!w | p == w) {
                         g = (q | p + a - S) ? 0 : S;
                         if ((!r & (!!q | A<3 || !!g)) || ((r+1&z^y)>9 && (q | A>2))) {
