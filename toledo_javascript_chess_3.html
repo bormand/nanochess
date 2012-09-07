@@ -91,10 +91,15 @@ function X(w,c,h,e,S,s) {
                                         u=J;
                                         return u;
                                     }
-                                    J=q-1|A<7||m||!s|d|r|o<z||X(0,0,0,21,0,0)>M;
-                                    I[O]=o;
-                                    I[p]=r;
-                                    m?(I[m]=I[g],I[g]=0):g?I[g]=9^y:0;
+                                    J = (q-1 | A<7) || m || (!s | d | r | o<z) || X(0,0,0,21,0,0) > M;
+                                    I[O] = o;
+                                    I[p] = r;
+                                    if (m) {
+                                        I[m] = I[g];
+                                        I[g] = 0;
+                                    } else if (g) {
+                                        I[g] = 9 ^ y;
+                                    }
                                 }
                                 if (L>N||s>1&&L==N&&!h&&Math.random()<.5) {
                                     I[G]=O;
