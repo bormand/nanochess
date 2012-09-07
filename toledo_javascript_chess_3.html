@@ -97,10 +97,28 @@ function X(w,c,h,e,S,s) {
     return y^=8,G--,N+M*M&&N>-K+1924|d?N:0;
 }
 
-B = i = y = u = 0;
+y = u = 0;
 
-while (B++<120)
-    I[B-1] = B%x?B/x%x<2|B%x<2?7:B/x&4?0:l[i++]|16:7;
+function SetupChessboard() {
+    var x, y;
+    var i = 0;
+    for (y=0; y<12; y++) {
+        for (x=0; x<10; x++) {
+            if (x<1 || y<2 || x>8 || y>9) {
+                // outside
+                I[y*10+x] = 7;
+            } else if (y>=4 && y<=7) {
+                // empty
+                I[y*10+x] = 0;
+            } else {
+                // pieces
+                I[y*10+x] = l[i++] | 16;
+            }
+        }
+    }
+}
+
+SetupChessboard();
 
 for (a="<table cellspacing=0 align=center>",i=18;
      i<100;
