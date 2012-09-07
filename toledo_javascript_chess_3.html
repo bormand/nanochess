@@ -125,7 +125,7 @@ function CreateChessboardView() {
         a += "<tr>";
         for (x=0; x<8; x++) {
             i = y*10 + x + 21;
-            a += "<th width=60 height=60 onclick=Y(" + i + ") id=o" + i +
+            a += "<th width=60 height=60 onclick=OnClick(" + i + ") id=o" + i +
                  " style='line-height:50px;font-size:50px;border:2px solid #dde' bgcolor=#" +
                  (((x+y) & 1) ? "c0c0f0>" : "f0f0f0>");
         }
@@ -148,25 +148,32 @@ function DrawPieces() {
     }
 }
 
+function OnClick(s) {
+    i = (I[s] ^ y) & z;
+    if (i > 8) {
+        // clicked on the white piece
+        b = s;
+        DrawPieces();
+    } else if (B && i<9) {
+        // clicked on the black piece or empty space
+        b = s;
+        i = I[B] & z;
+        // pawn promotion
+        if ((i & 7) == 1 & (b < 29 | b > 90))
+            i = 14 - document.getElementById("t").selectedIndex ^ y;
+        // verify player move
+        X(0,0,0,21,u,1);
+        // Call A.I. after some delay
+        if (y) {
+            setTimeout("X(0,0,0,21,u,2/*ply*/),X(0,0,0,21,u,1)",250);
+        }
+    }
+}
+
 SetupChessboard();
 CreateChessboardView();
 DrawPieces();
 
 i = 100;
-
-function Y(s) {
-    i=(I[s]^y)&z;
-    if (i>8) {
-        b=s;
-        DrawPieces();
-    } else if (B&&i<9) {
-        b=s;
-        i=I[B]&z;
-        if ((i&7)==1&(b<29|b>90))
-            i=14-document.getElementById("t").selectedIndex^y;X(0,0,0,21,u,1);
-        if (y)
-            setTimeout("X(0,0,0,21,u,2/*ply*/),X(0,0,0,21,u,1)",250);
-    }
-}
 
 </script>
