@@ -70,7 +70,7 @@ function X(w,c,h,e,S,s) {
                                     I[p]=n,I[O]=m?(I[g]=I[m],I[m]=0):g?I[g]=0:0;
                                     L-=X(s>h|d?0:p,L-N,h+1,I[G+1],J=q|A>1?0:p,s);
                                     if (!(h||s-1|B-O|i-n|p-b|L<-M))
-                                        return W(),G--,u=J;
+                                        return DrawPieces(),G--,u=J;
                                     J=q-1|A<7||m||!s|d|r|o<z||X(0,0,0,21,0,0)>M;
                                     I[O]=o;
                                     I[p]=r;
@@ -137,27 +137,28 @@ function CreateChessboardView() {
     document.write(a);
 }
 
-SetupChessboard();
-CreateChessboardView();
-
-i = 100;
-
-function W() {
+function DrawPieces() {
+    var pieces = "\xa0\u265f\u265a\u265e\u265d\u265c\u265b  \u2659\u2654\u2658\u2657\u2656\u2655";
     B=b;
-    for (p=21; p<99; ++p)
-        if (q=document.getElementById("o"+p)) {
-            q.innerHTML="\xa0\u265f\u265a\u265e\u265d\u265c\u265b  \u2659\u2654\u2658\u2657\u2656\u2655".charAt(I[p]&z);
-            q.style.borderColor=p==B?"red":"#dde";
+    for (p=21; p<99; ++p) {
+        if (q = document.getElementById("o" + p)) {
+            q.innerHTML = pieces.charAt(I[p] & 15);
+            q.style.borderColor = (p == B) ? "red" : "#dde";
         }
+    }
 }
 
-W();
+SetupChessboard();
+CreateChessboardView();
+DrawPieces();
+
+i = 100;
 
 function Y(s) {
     i=(I[s]^y)&z;
     if (i>8) {
         b=s;
-        W();
+        DrawPieces();
     } else if (B&&i<9) {
         b=s;
         i=I[B]&z;
