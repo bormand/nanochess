@@ -65,6 +65,8 @@ function X(w,c,h,e,S,s) {
                             }
                             J = n = o & z;
                             E = I[p - a] & z;
+                            // for pawn on the last line loop runs from n=3(or 11) to t=6(or 14)
+                            // for any other piece loop runs only once with n = t = piece code
                             t = (q | E-7) ? n : (n+=2,6^y);
                             while (n <= t) {
                                 L = r ? l[r&7|32]-h-q : 0;
