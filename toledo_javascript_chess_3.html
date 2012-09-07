@@ -101,13 +101,19 @@ function X(w,c,h,e,S,s) {
                                         I[g] = 9 ^ y;
                                     }
                                 }
-                                if (L>N||s>1&&L==N&&!h&&Math.random()<.5) {
-                                    I[G]=O;
-                                    if (s>1) {
-                                        if (h&&c-L<0)
-                                            return y^=8,G--,L;
-                                        if (!h)
-                                            i=n,B=O,b=p;
+                                if (L>N || (s>1 && L==N && !h && Math.random()<.5)) {
+                                    I[G] = O;
+                                    if (s > 1) {
+                                        if (h && c-L < 0) {
+                                            y ^= 8;
+                                            G--;
+                                            return L;
+                                        }
+                                        if (!h) {
+                                            i=n;
+                                            B=O;
+                                            b=p;
+                                        }
                                     }
                                     N=L;
                                 }
