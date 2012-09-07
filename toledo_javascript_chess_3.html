@@ -118,16 +118,29 @@ function SetupChessboard() {
     }
 }
 
+function CreateChessboardView() {
+    var x, y, i;
+    var a = "<table cellspacing=0 align=center>";
+    for (y=0; y<8; y++) {
+        a += "<tr>";
+        for (x=0; x<8; x++) {
+            i = y*10 + x + 21;
+            a += "<th width=60 height=60 onclick=Y(" + i + ") id=o" + i +
+                 " style='line-height:50px;font-size:50px;border:2px solid #dde' bgcolor=#" +
+                 (((x+y) & 1) ? "c0c0f0>" : "f0f0f0>");
+        }
+        a += "</tr>";
+    }
+    a += "<tr><th colspan=8><select id=t style='font-size:20px'>";
+    a += "<option>&#9819;<option>&#9820;<option>&#9821;<option>&#9822;";
+    a += "</select></tr></table>";
+    document.write(a);
+}
+
 SetupChessboard();
+CreateChessboardView();
 
-for (a="<table cellspacing=0 align=center>",i=18;
-     i<100;
-     a+=++i%10-9?"<th width=60 height=60 onclick=Y("+i+") id=o"+i+
-     " style='line-height:50px;font-size:50px;border:2px solid #dde' bgcolor=#"+
-     (i*.9&1?"c0c":"f0f")+"0f0>":(i++,"<tr>"));
-
-a+="<th colspan=8><select id=t style='font-size:20px'><option>&#9819;<option>";
-document.write(a+"&#9820;<option>&#9821;<option>&#9822;</select></table>");
+i = 100;
 
 function W() {
     B=b;
