@@ -1,21 +1,21 @@
 <script>
 //(c)2010 Oscar Toledo G.
 
-var B,
-    i,
-    y,
+var B, // source position of the move
+    i, // current piece code
+    y, // current player: 0 - white, 8 - black
     u,
-    b,
-    I = [],
+    b, // target position of the move
+    I = [], // chessboard (12 rows x 10 columns, see wiki for more info)
     G = 120,
-    x = 10,
-    z = 15,
-    M = 1e4,
-    l = [5,3,4,6,2,4,3,5,
+    x = 10, // just ten ;)
+    z = 15, // just fifteen ;)
+    M = 10000,
+    l = [5,3,4,6,2,4,3,5, // initial black pieces setup
          1,1,1,1,1,1,1,1,
-         9,9,9,9,9,9,9,9,
+         9,9,9,9,9,9,9,9, // same, but for white pieces
          13,11,12,14,10,12,11,13,
-         0,99,0,306,297,495,846,-1,
+         0,99,0,306,297,495,846,-1, // ???
          0,1,2,2,1,0,-1,-1,
          1,-10,10,-11,-9,9,11,10,
          20,-9,-11,-10,-20,-21,-19,-12,
@@ -152,17 +152,17 @@ function DrawPieces() {
 function OnClick(s) {
     i = (I[s] ^ y) & z;
     if (i > 8) {
-        // clicked on the white piece
+        // clicked on the own piece
         b = s;
         DrawPieces();
     } else if (B && i<9) {
-        // clicked on the black piece or empty space
+        // clicked on the opponent piece or empty space
         b = s;
         i = I[B] & z;
         // pawn promotion
         if ((i & 7) == 1 & (b < 29 | b > 90))
             i = 14 - document.getElementById("t").selectedIndex ^ y;
-        // verify player move
+        // verify player move??
         X(0,0,0,21,u,1);
         // Call A.I. after some delay
         if (y) {
