@@ -84,9 +84,15 @@ function X(w,c,h,e,S,s) {
                                        !(E ^ y ^ 9);
                                 }
                                 if ((s > h) || ((1<s & s==h) && (L>z | d))) {
+                                    // execute move
                                     I[p] = n;
-                                    I[O] = m ? (I[g] = I[m], I[m] = 0)
-                                             : g ? I[g]=0 : 0;
+                                    if (m) {
+                                        I[g] = I[m];
+                                        I[m] = 0;
+                                    } else if (g) {
+                                        I[g] = 0;
+                                    }
+                                    I[O] = 0;
                                     L -= X((s > h | d) ? 0 : p,
                                            L - N,
                                            h + 1,
