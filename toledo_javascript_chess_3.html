@@ -38,7 +38,7 @@ function X(w,c,h,e,S,s) {
         r,
         C,
         J,
-        a = y ? -x : x;
+        a = y ? -x : x; // +10 for white, -10 for black
     y ^= 8;
     G++;
     d = w || (s && s>=h && X(0,0,0,21,0,0) > M);
@@ -61,15 +61,15 @@ function X(w,c,h,e,S,s) {
                     if (!w | p == w) {
                         g = (q | p + a - S) ? 0 : S;
                         if ((!r & (!!q | A<3 || !!g)) || ((r+1&z^y)>9 && (q | A>2))) {
-                            m = !(r - 2 & 7);
+                            m = !(r - 2 & 7); // king on the target cell
                             if (m) {
                                 y ^= 8;
                                 I[G--] = O;
                                 return K;
                             }
-                            J = n = o & z;
-                            E = I[p - a] & z;
-                            // for pawn on the last line loop runs from n=3(or 11) to t=6(or 14)
+                            J = n = o & z; // J & n - current piece code
+                            E = I[p - a] & z; // piece at the cell above target (for white) or below target (for black)
+                            // for pawn on the last line loop runs from n=3 (or 11) to t=6 (or 14) (promotions)
                             // for any other piece loop runs only once with n = t = piece code
                             t = (q | E-7) ? n : (n+=2,6^y);
                             while (n <= t) {
