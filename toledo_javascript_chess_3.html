@@ -42,15 +42,19 @@ function X(w,c,h,e,S,s) {
     y ^= 8;
     G++;
     d = w || (s && s>=h && X(0,0,0,21,0,0) > M);
+    // loop for all cells starting with e (usually 21, "A8") and finishing just before e
+    // O - current cell, read-only inside loop
     do {
         p = O; // current position
-        o = I[p]; // current piece code (or'ed with 16) or 0
-        if (o) {
-            q = o & z ^ y; // current piece code (1..6 for current player, 9..15 for opponent)
+        o = I[p]; // current piece code (or'ed with 16) or 0 or 7
+        if (o) { // if cell doesn't empty
+            q = o & z ^ y; // current piece code (1..6 for current player, 9..14 for opponent, 7 or 15 - outside)
             if (q < 7) {
-                A = (q-- & 2) ? 8 : 4; // possible moves (8 for queen, king, knight)
+                A = (q-- & 2) ? 8 : 4; // # of possible moves (8 for queen, king, knight)
                 C = ((o-9) & z) ? [53,47,61,51,47,47][q] : 57; // offset of possible moves
-                // for each possible move ...
+                // q decreased: 0 pawn, 1 king, 2 knight, 3 bishop, 4 rook, 5 queen
+                // check each possible move of the current piece
+                // A,C,q,o are read-only inside loop
                 do {
                     p += l[C]; // target cell position
                     r = I[p]; // piece code at the target cell
