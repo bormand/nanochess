@@ -4,7 +4,7 @@
 var B, // source position of the move
     i, // current piece code
     y, // current player: 0 - white, 8 - black
-    u,
+    u, // target cell of the latest move
     b, // target position of the move
     I = [], // chessboard (12 rows x 10 columns, see wiki for more info)
     G = 120,
@@ -22,6 +22,7 @@ var B, // source position of the move
          -20,-21,-19,-12,-8,8,12,19,21] // knight moves (at 61)
 
 // When w=0 function scans all possible moves, otherwise just that ends up at w
+// S - target cell of the latest move
 function X(w,c,h,e,S,s) {
     var t,
         o,
