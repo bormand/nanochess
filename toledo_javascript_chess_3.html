@@ -15,11 +15,13 @@ var B, // source position of the move
          1,1,1,1,1,1,1,1,
          9,9,9,9,9,9,9,9, // same, but for white pieces
          13,11,12,14,10,12,11,13,
-         0,99,0,306,297,495,846,-1,0,1,2,2,1,0,-1, // ???
+         0,99,0,306,297,495,846, // values of pieces (empty,pawn,king,knight,bishop,rook,queen)
+         -1,0,1,2,2,1,0,-1, // ???
          -1,1,-10,10,-11,-9,9,11,10,20, // king, rook & queen moves (at 47), bishop (at 51), black pawn (at 53)
          -9,-11,-10, // white pawn moves (at 57)
          -20,-21,-19,-12,-8,8,12,19,21] // knight moves (at 61)
 
+// When w=0 function scans all possible moves, otherwise just that ends up at w
 function X(w,c,h,e,S,s) {
     var t,
         o,
@@ -57,8 +59,8 @@ function X(w,c,h,e,S,s) {
                 // A,C,q,o are read-only inside loop
                 do {
                     p += l[C]; // target cell position
-                    r = I[p]; // piece code at the target cell
-                    if (!w | p == w) {
+                    r = I[p]; // piece code at the target cell, read-only below
+                    if (!w | p == w) { // required target cell not specified or equals to current target
                         g = (q | p + a - S) ? 0 : S;
                         if ((!r & (!!q | A<3 || !!g)) || ((r+1&z^y)>9 && (q | A>2))) {
                             m = !(r - 2 & 7); // king on the target cell
@@ -73,7 +75,7 @@ function X(w,c,h,e,S,s) {
                             // for any other piece loop runs only once with n = t = piece code
                             t = (q | E-7) ? n : (n+=2,6^y);
                             while (n <= t) {
-                                L = r ? l[r&7|32]-h-q : 0;
+                                L = r ? l[r&7|32]-h-q : 0; // value of the attacked piece (0 for empty cell)
                                 if (s) {
                                     L+=((1-q) ? l[(p-p%x)/x+37] - l[(O-O%x)/x+37] + l[p%x+38]*(q?1:2) - l[O%x+38]+(o&16)/2
                                               : !!m * 9) +
