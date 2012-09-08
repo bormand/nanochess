@@ -23,6 +23,7 @@ var B, // source position of the move
 
 // When w=0 function scans all possible moves, otherwise just that ends up at w
 // S - target cell of the latest move
+// s - scan depth (1 - just check possibility of B -> b, 0 - ???)
 function X(w,c,h,e,S,s) {
     var t,
         o,
