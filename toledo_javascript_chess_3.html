@@ -34,9 +34,9 @@ function X(w,c,h,e,S,s) {
         N = -M*M,
         K = 78 - h<<x,
         p,
-        g, // "en passant" target position
+        g, // "en passant" or castling target position
         n,
-        m,
+        m, // castling source position
         A,
         q,
         r,
@@ -71,9 +71,11 @@ function X(w,c,h,e,S,s) {
                                 I[G--] = O;
                                 return K;
                             }
+                            // m is 0 after this point
                             J = n = o & z; // J & n - current piece code
                             E = I[p - a] & z; // piece at the cell above target (for white) or below target (for black)
                             // for pawn on the last line loop runs from n=3 (or 11) to t=6 (or 14) (promotions)
+                            // for king loop can run two times if castling is possible
                             // for any other piece loop runs only once with n = t = piece code
                             t = (q | E-7) ? n : (n+=2,6^y);
                             while (n <= t) {
@@ -134,6 +136,7 @@ function X(w,c,h,e,S,s) {
                                     }
                                     N = L;
                                 }
+                                // try castling if J == 0
                                 n += J || (g = p,
                                            m = (p < O) ? g-3 : g+2,
                                            (I[m] < z | I[m+O-p]) || I[p+=p-O]) ? 1 : 0;
