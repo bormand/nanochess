@@ -33,7 +33,7 @@ function X(w,c,h,e,S,s) {
         N = -M*M,
         K = 78 - h<<x,
         p,
-        g,
+        g, // "en passant" target position
         n,
         m,
         A,
@@ -62,7 +62,7 @@ function X(w,c,h,e,S,s) {
                     p += l[C]; // target cell position
                     r = I[p]; // piece code at the target cell, read-only below
                     if (!w | p == w) { // required target cell not specified or equals to current target
-                        g = (q | p + a - S) ? 0 : S;
+                        g = (q == 0 && p + a == S) ? S : 0; // en passant
                         if ((!r & (!!q | A<3 || !!g)) || ((r+1&z^y)>9 && (q | A>2))) {
                             m = !(r - 2 & 7); // king on the target cell
                             if (m) {
