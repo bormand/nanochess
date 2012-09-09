@@ -15,8 +15,8 @@ var B, // source position of the move
          1,1,1,1,1,1,1,1,
          9,9,9,9,9,9,9,9, // same, but for white pieces
          13,11,12,14,10,12,11,13,
-         0,99,0,306,297,495,846, // values of pieces (empty,pawn,king,knight,bishop,rook,queen)
-         -1,0,1,2,2,1,0,-1, // ???
+         0,99,0,306,297,495,846, // cost of the pieces (empty,pawn,king,knight,bishop,rook,queen)
+         -1,0,1,2,2,1,0,-1, // cost of the rows/columns
          -1,1,-10,10,-11,-9,9,11,10,20, // king, rook & queen moves (at 47), bishop (at 51), black pawn (at 53)
          -9,-11,-10, // white pawn moves (at 57)
          -20,-21,-19,-12,-8,8,12,19,21] // knight moves (at 61)
@@ -80,6 +80,31 @@ function X(w,c,h,e,S,s) {
                             // for any other piece loop runs only once with n = t = piece code
                             t = (q | E-7) ? n : (n+=2,6^y);
                             while (n <= t) {
+                                // Heuristic:
+                                // For attack moves:
+                                //   + attacked piece cost
+                                //     pawn: 99, knight: 306, bishop: 297, rook: 495, queen: 846
+                                //   - attacker piece cost
+                                //     pawn: 0, king: 1, knight: 2, bishop: 3, rook: 4, queen: 5
+                                //   - current depth
+                                // For king:
+                                //   +9 for castling
+                                // For all except king:
+                                //   + for target row
+                                //   - for source row
+                                //     1:-1, 2:0, 3:1, 4:2, 5:2, 6:1, 7:0, 8:-1
+                                //   + for target column (doubled for pawns)
+                                //   - for source column
+                                //     A:-1, B:0, C:1, D:2, E:2, F:1, G:0, H:-1
+                                //   +8 if piece doesn't moved before
+                                // For pawn:
+                                //   -99 if current move isn't "en passant"
+                                //   +1 if have own pawn to the left/right of the target cell
+                                //   + for promotion:
+                                //     knight: 306, bishop: 297, rook: 495, queen: 846
+                                //   +1 for two-square move
+                                // For all:
+                                //   +1 for blocking opponent's pawn
                                 L = r ? l[r&7|32]-h-q : 0; // value of the attacked piece (0 for empty cell)
                                 if (s) {
                                     L+=((1-q) ? l[(p-p%x)/x+37] - l[(O-O%x)/x+37] + l[p%x+38]*(q?1:2) - l[O%x+38]+(o&16)/2
