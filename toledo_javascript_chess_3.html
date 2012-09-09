@@ -268,7 +268,11 @@ function DrawPieces() {
     }
 }
 
+var clickLock = false;
+
 function OnClick(s) {
+    if (clickLock)
+        return;
     i = (I[s] ^ y) & z;
     if (i > 8) {
         // clicked on the own piece
@@ -285,7 +289,8 @@ function OnClick(s) {
         X(0,0,0,21,u,1);
         // Call A.I. after some delay
         if (y) {
-            setTimeout("X(0,0,0,21,u,2/*ply*/),X(0,0,0,21,u,1)",250);
+            clickLock = true;
+            setTimeout("X(0,0,0,21,u,2/*ply*/);X(0,0,0,21,u,1);clickLock=false;",250);
         }
     }
 }
