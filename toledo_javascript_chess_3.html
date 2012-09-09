@@ -204,6 +204,9 @@ function X(w,c,h,e,S,s) {
                             }
                         }
                     }
+                    // If target cell was empty and current piece is rook, queen or bishop -
+                    // try to move further in same direction. otherwise try next move from table
+                    // skip two-square move for pawn if it was moved, or square ahead of it is occupied.
                 } while ((!r & q>2) || (p=O, (q | A > 2 | o > z & !r) && (++C * --A)));
             }
         }
