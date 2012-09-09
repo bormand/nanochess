@@ -23,7 +23,8 @@ var B, // source position of the move
 
 // When w=0 function scans all possible moves, otherwise just that ends up at w
 // S - position of pawn after two-square move, 0 after any other move
-// s - scan depth (1 - just check possibility of B -> b, 0 - ???)
+// s - scan depth (1 - verify B -> b and execute it,
+//                 0 - used for check checking (returns above 70k when opponent's king under attack)
 function X(w,c,h,e,S,s) {
     var t,
         o,
@@ -32,7 +33,7 @@ function X(w,c,h,e,S,s) {
         d,
         O = e,
         N = -M*M, // heuristic of the best move
-        K = 78 - h<<x,
+        K = (78 - h) << x, // cost of the check
         p,
         g, // "en passant" or castling target position
         n,
@@ -65,7 +66,7 @@ function X(w,c,h,e,S,s) {
                     if (!w | p == w) { // required target cell not specified or equals to current target
                         g = (q == 0 && p + a == S) ? S : 0; // en passant
                         if ((!r & (!!q | A<3 || !!g)) || ((r+1&z^y)>9 && (q | A>2))) {
-                            m = !(r - 2 & 7); // king on the target cell
+                            m = !(r - 2 & 7); // king on the target cell, check!
                             if (m) {
                                 y ^= 8;
                                 I[G--] = O;
@@ -134,6 +135,7 @@ function X(w,c,h,e,S,s) {
                                             G--;
                                             return L;
                                         }
+                                        // output this move
                                         if (!h) {
                                             i = n;
                                             B = O;
