@@ -27,11 +27,11 @@ var B, // source position of the move
 function X(w,c,h,e,S,s) {
     var t,
         o,
-        L,
+        L, // heuristic of the current move
         E,
         d,
         O = e,
-        N = -M*M,
+        N = -M*M, // heuristic of the best move
         K = 78 - h<<x,
         p,
         g, // "en passant" or castling target position
@@ -97,18 +97,22 @@ function X(w,c,h,e,S,s) {
                                         I[g] = 0;
                                     }
                                     I[O] = 0;
+                                    // find best opponent's move
                                     L -= X((s > h | d) ? 0 : p,
                                            L - N,
                                            h + 1,
                                            I[G+1],
                                            J = (q|A>1) ? 0 : p,
                                            s);
+                                    // if we in check mode (s==1) and current move (O,p,n) same as player's (B,b,i)
+                                    // and move is possible then update chessboard and return
                                     if (!h && s == 1 && B == O && i == n && p == b && L >= -M) {
                                         DrawPieces();
                                         G--;
                                         u = J;
                                         return u;
                                     }
+                                    // is castling possible?
                                     J = (q-1 | A<7) || m || (!s | d | r | o<z) || X(0,0,0,21,0,0) > M;
                                     // undo move
                                     I[O] = o;
@@ -120,6 +124,7 @@ function X(w,c,h,e,S,s) {
                                         I[g] = 9 ^ y;
                                     }
                                 }
+                                // if current move has better heuristic
                                 if (L>N || (s>1 && L==N && !h && Math.random()<.5)) {
                                     I[G] = O;
                                     if (s > 1) {
