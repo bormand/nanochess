@@ -254,7 +254,7 @@ function OnClick(s) {
         // pawn promotion
         if ((i & 7) == 1 & (b < 29 | b > 90))
             i = 14 - document.getElementById("t").selectedIndex ^ y;
-        // verify player move??
+        // verify player move and execute it
         X(0,0,0,21,u,1);
         // Call A.I. after some delay
         if (y) {
