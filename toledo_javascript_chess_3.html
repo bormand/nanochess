@@ -22,6 +22,9 @@ var B, // source position of the move
          -20,-21,-19,-12,-8,8,12,19,21] // knight moves (at 61)
 
 // When w=0 function scans all possible moves, otherwise just that ends up at w
+// c - cutoff threshold. Function returns if h>0 and move with heuristic greater than c found
+// h - current depth (starts with 0)
+// e - cell from which moves enumeration starts (usually 21, "A8")
 // S - position of pawn after two-square move, 0 after any other move
 // s - scan depth (1 - verify B -> b and execute it,
 //                 0 - used for check checking (returns above 70k when opponent's king under attack)
