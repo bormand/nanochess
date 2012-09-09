@@ -97,12 +97,13 @@ function X(w,c,h,e,S,s) {
                                         I[g] = 0;
                                     }
                                     I[O] = 0;
-                                    // find best opponent's move
+                                    // find opponent's best move
+                                    J = (q|A>1) ? 0 : p;
                                     L -= X((s > h | d) ? 0 : p,
                                            L - N,
                                            h + 1,
                                            I[G+1],
-                                           J = (q|A>1) ? 0 : p,
+                                           J,
                                            s);
                                     // if we in check mode (s==1) and current move (O,p,n) same as player's (B,b,i)
                                     // and move is possible then update chessboard and return
