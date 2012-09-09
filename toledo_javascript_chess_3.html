@@ -1,6 +1,30 @@
 <script>
 //(c)2010 Oscar Toledo G.
 
+// Chessboard structure (array "I"):
+//      0  1  2  3  4  5  6  7  8  9
+//  00 -- -- -- -- -- -- -- -- -- --
+//  10 -- -- -- -- -- -- -- -- -- --
+//  20 -- A8 B8 C8 D8 E8 F8 G8 H8 --
+//  30 -- A7 B7 C7 D7 E7 F7 G7 H7 --
+//  40 -- A6 B6 C6 D6 E6 F6 G6 H6 --
+//  50 -- A5 B5 C5 D5 E5 F5 G5 H5 --
+//  60 -- A4 B4 C4 D4 E4 F4 G4 H4 --
+//  70 -- A3 B3 C3 D3 E3 F3 G3 H3 --
+//  80 -- A2 B2 C2 D2 E2 F2 G2 H2 --
+//  90 -- A1 B1 C1 D1 E1 F1 G1 H1 --
+// 100 -- -- -- -- -- -- -- -- -- --
+// 110 -- -- -- -- -- -- -- -- -- --
+//
+// Piece codes:
+//   1 - pawn      4 - bishop
+//   2 - king      5 - rook
+//   3 - knight    6 - queen
+//
+// White pieces or'ed with 0x08, pieces that wasn't moved or'ed with 0x10.
+// So, for example, white king has code 0x1A and after it's first move becomes 0x0A.
+// Area outside of the chessboard filled with 0x07, empty cells contain 0x00.
+
 var B, // source position of the move
     i, // current piece code
     y, // current player: 0 - white, 8 - black
