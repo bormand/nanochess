@@ -155,7 +155,8 @@ function X(w,c,h,e,S,s) {
                                 if (L>N || (s>1 && L==N && !h && Math.random()<.5)) {
                                     I[G] = O;
                                     if (s > 1) {
-                                        if (h && c-L < 0) {
+                                        // cutoff
+                                        if (h && L > c) {
                                             y ^= 8;
                                             G--;
                                             return L;
