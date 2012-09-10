@@ -36,15 +36,7 @@ var B, // source position of the move
     z = 15, // just fifteen ;)
     M = 10000,
     piecesCosts = [0,99,0,306,297,495,846], // cost of the pieces (empty,pawn,king,knight,bishop,rook,queen)
-    l = [5,3,4,6,2,4,3,5, // initial black pieces setup
-         1,1,1,1,1,1,1,1,
-         9,9,9,9,9,9,9,9, // same, but for white pieces
-         13,11,12,14,10,12,11,13,
-         0,99,0,306,297,495,846, // cost of the pieces (empty,pawn,king,knight,bishop,rook,queen)
-         -1,0,1,2,2,1,0,-1, // cost of the rows/columns
-         -1,1,-10,10,-11,-9,9,11,10,20, // king, rook & queen moves (at 47), bishop (at 51), black pawn (at 53)
-         -9,-11,-10, // white pawn moves (at 57)
-         -20,-21,-19,-12,-8,8,12,19,21] // knight moves (at 61)
+    rowsCosts = [-1,0,1,2,2,1,0,-1]; // cost of the rows/columns
 
 function movesForPiece(piece) {
     var moves = [
@@ -154,7 +146,8 @@ function X(w,c,h,e,S,s) {
                                 //   +1 for blocking opponent's pawn
                                 L = r ? piecesCosts[r&7]-h-q : 0; // value of the attacked piece (0 for empty cell)
                                 if (s) {
-                                    L+=((1-q) ? l[(p-p%x)/x+37] - l[(O-O%x)/x+37] + l[p%x+38]*(q?1:2) - l[O%x+38]+(o&16)/2
+                                    L+=((1-q) ? rowsCosts[(p-p%x)/x-2] - rowsCosts[(O-O%x)/x-2] +
+                                                rowsCosts[p%x-1]*(q?1:2) - rowsCosts[O%x-1] + (o&16)/2
                                               : !!m * 9) +
                                        (!q ? !(I[p-1]^n) + !(I[p+1]^n) + piecesCosts[n&7] - 99 + !!g * 99 + (C == 3)
                                            : 0) +
