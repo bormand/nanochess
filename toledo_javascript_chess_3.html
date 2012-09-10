@@ -35,6 +35,7 @@ var B, // source position of the move
     x = 10, // just ten ;)
     z = 15, // just fifteen ;)
     M = 10000,
+    piecesCosts = [0,99,0,306,297,495,846], // cost of the pieces (empty,pawn,king,knight,bishop,rook,queen)
     l = [5,3,4,6,2,4,3,5, // initial black pieces setup
          1,1,1,1,1,1,1,1,
          9,9,9,9,9,9,9,9, // same, but for white pieces
@@ -132,11 +133,11 @@ function X(w,c,h,e,S,s) {
                                 //   +1 for two-square move
                                 // For all:
                                 //   +1 for blocking opponent's pawn
-                                L = r ? l[r&7|32]-h-q : 0; // value of the attacked piece (0 for empty cell)
+                                L = r ? piecesCosts[r&7]-h-q : 0; // value of the attacked piece (0 for empty cell)
                                 if (s) {
                                     L+=((1-q) ? l[(p-p%x)/x+37] - l[(O-O%x)/x+37] + l[p%x+38]*(q?1:2) - l[O%x+38]+(o&16)/2
                                               : !!m * 9) +
-                                       (!q ? !(I[p-1]^n) + !(I[p+1]^n) + l[n&7|32] - 99 + !!g * 99 + (A<2)
+                                       (!q ? !(I[p-1]^n) + !(I[p+1]^n) + piecesCosts[n&7] - 99 + !!g * 99 + (A<2)
                                            : 0) +
                                        !(E ^ y ^ 9);
                                 }
