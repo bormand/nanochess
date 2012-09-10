@@ -46,6 +46,24 @@ var B, // source position of the move
          -9,-11,-10, // white pawn moves (at 57)
          -20,-21,-19,-12,-8,8,12,19,21] // knight moves (at 61)
 
+function movesForPiece(piece) {
+    var moves = [
+        [9,11,10,20],                 // black pawn
+        [-1,1,-10,10,-11,-9,9,11],    // king
+        [-21,-19,-12,-8,8,12,19,21],  // knight
+        [-11,-9,9,11],                // bishop
+        [-1,1,-10,10],                // rook
+        [-1,1,-10,10,-11,-9,9,11]     // queen
+    ];
+
+    // for white pawn
+    if ((piece & 15) == 9)
+        return [-9,-11,-10, -20];
+
+    // for other pieces
+    return moves[(piece & 7) - 1];
+}
+
 // When w=0 function scans all possible moves, otherwise just that ends up at w
 // c - cutoff threshold. Function returns if h>0 and move with heuristic greater than c found
 // h - current depth (starts with 0)
@@ -71,7 +89,8 @@ function X(w,c,h,e,S,s) {
         r,
         C,
         J,
-        a = y ? -x : x; // +10 for white, -10 for black
+        a = y ? -x : x, // +10 for white, -10 for black
+        moves;
     y ^= 8;
     G++;
     d = w || (s && s>=h && X(0,0,0,21,0,0) > M);
@@ -83,13 +102,15 @@ function X(w,c,h,e,S,s) {
         if (o) { // if cell doesn't empty
             q = o & z ^ y; // current piece code (1..6 for current player, 9..14 for opponent, 7 or 15 - outside)
             if (q < 7) {
-                A = (q-- & 2) ? 8 : 4; // # of possible moves (8 for queen, king, knight)
-                C = ((o-9) & z) ? [53,47,61,51,47,47][q] : 57; // offset of possible moves
+                q--;
+                moves = movesForPiece(o);
+                A = moves.length;
+                C = 0;
                 // q decreased: 0 pawn, 1 king, 2 knight, 3 bishop, 4 rook, 5 queen
                 // check each possible move of the current piece
                 // A,C,q,o are read-only inside loop
                 do {
-                    p += l[C]; // target cell position
+                    p += moves[C]; // target cell position
                     r = I[p]; // piece code at the target cell, read-only below
                     if (!w | p == w) { // required target cell not specified or equals to current target
                         g = (q == 0 && p + a == S) ? S : 0; // en passant
