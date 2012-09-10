@@ -98,7 +98,7 @@ function X(w,c,h,e,S,s) {
                 C = 0;
                 // q decreased: 0 pawn, 1 king, 2 knight, 3 bishop, 4 rook, 5 queen
                 // check each possible move of the current piece
-                // A,C,q,o are read-only inside loop
+                // C,q,o are read-only inside loop
                 do {
                     p += moves[C]; // target cell position
                     r = I[p]; // piece code at the target cell, read-only below
