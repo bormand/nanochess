@@ -57,6 +57,28 @@ function movesForPiece(piece) {
     return moves[(piece & 7) - 1];
 }
 
+function executeMove(O, p, n, m, g) {
+    board[p] = n;
+    if (m) {
+        board[g] = board[m];
+        board[m] = 0;
+    } else if (g) {
+        board[g] = 0;
+    }
+    board[O] = 0;
+}
+
+function undoMove(O, p, o, r, m, g) {
+    board[O] = o;
+    board[p] = r;
+    if (m) {
+        board[m] = board[g];
+        board[g] = 0;
+    } else if (g) {
+        board[g] = 9 ^ y;
+    }
+}
+
 // When w=0 function scans all possible moves, otherwise just that ends up at w
 // c - cutoff threshold. Function returns if h>0 and move with heuristic greater than c found
 // h - current depth (starts with 0)
@@ -156,14 +178,7 @@ function X(w,c,h,e,S,s) {
                                 }
                                 if ((s > h) || ((1<s & s==h) && (L>z | d))) {
                                     // execute move
-                                    board[p] = n;
-                                    if (m) {
-                                        board[g] = board[m];
-                                        board[m] = 0;
-                                    } else if (g) {
-                                        board[g] = 0;
-                                    }
-                                    board[O] = 0;
+                                    executeMove(O, p, n, m, g);
                                     // find opponent's best move
                                     J = (q | C<3) ? 0 : p;
                                     L -= X((s > h | d) ? 0 : p,
@@ -183,14 +198,7 @@ function X(w,c,h,e,S,s) {
                                     // is castling possible?
                                     J = (q-1 | C>1) || m || (!s | d | r | o<z) || X(0,0,0,21,0,0) > M;
                                     // undo move
-                                    board[O] = o;
-                                    board[p] = r;
-                                    if (m) {
-                                        board[m] = board[g];
-                                        board[g] = 0;
-                                    } else if (g) {
-                                        board[g] = 9 ^ y;
-                                    }
+                                    undoMove(O, p, o, r, m, g);
                                 }
                                 // if current move has better heuristic
                                 if (L>N || (s>1 && L==N && !h && Math.random()<.5)) {
