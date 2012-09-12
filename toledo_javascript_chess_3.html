@@ -30,7 +30,8 @@ var B, // source position of the move
     y, // current player: 0 - white, 8 - black
     u, // position of pawn after two-square move, 0 after any other move
     b, // target position of the move
-    I = [], // chessboard (12 rows x 10 columns, see wiki for more info)
+    I = [],
+    board = [], // chessboard (12 rows x 10 columns, see wiki for more info)
     G = 120,
     x = 10, // just ten ;)
     z = 15, // just fifteen ;)
@@ -89,7 +90,7 @@ function X(w,c,h,e,S,s) {
     // O - current cell, read-only inside loop
     do {
         p = O; // current position
-        o = I[p]; // current piece code (or'ed with 16) or 0 or 7
+        o = board[p]; // current piece code (or'ed with 16) or 0 or 7
         if (o) { // if cell doesn't empty
             q = o & z ^ y; // current piece code (1..6 for current player, 9..14 for opponent, 7 or 15 - outside)
             if (q < 7) {
@@ -101,7 +102,7 @@ function X(w,c,h,e,S,s) {
                 // C,q,o are read-only inside loop
                 do {
                     p += moves[C]; // target cell position
-                    r = I[p]; // piece code at the target cell, read-only below
+                    r = board[p]; // piece code at the target cell, read-only below
                     if (!w | p == w) { // required target cell not specified or equals to current target
                         g = (q == 0 && p + a == S) ? S : 0; // en passant
                         if ((!r & (!!q | C>1 || !!g)) || ((r+1&z^y)>9 && (q | C<2))) {
@@ -113,7 +114,7 @@ function X(w,c,h,e,S,s) {
                             }
                             // m is 0 after this point
                             J = n = o & z; // J & n - current piece code
-                            E = I[p - a] & z; // piece at the cell above target (for white) or below target (for black)
+                            E = board[p - a] & z; // piece at the cell above target (for white) or below target (for black)
                             // for pawn on the last line loop runs from n=3 (or 11) to t=6 (or 14) (promotions)
                             // for king loop can run two times if castling is possible
                             // for any other piece loop runs only once with n = t = piece code
@@ -149,20 +150,20 @@ function X(w,c,h,e,S,s) {
                                     L+=((1-q) ? rowsCosts[(p-p%x)/x-2] - rowsCosts[(O-O%x)/x-2] +
                                                 rowsCosts[p%x-1]*(q?1:2) - rowsCosts[O%x-1] + (o&16)/2
                                               : !!m * 9) +
-                                       (!q ? !(I[p-1]^n) + !(I[p+1]^n) + piecesCosts[n&7] - 99 + !!g * 99 + (C == 3)
+                                       (!q ? !(board[p-1]^n) + !(board[p+1]^n) + piecesCosts[n&7] - 99 + !!g * 99 + (C == 3)
                                            : 0) +
                                        !(E ^ y ^ 9);
                                 }
                                 if ((s > h) || ((1<s & s==h) && (L>z | d))) {
                                     // execute move
-                                    I[p] = n;
+                                    board[p] = n;
                                     if (m) {
-                                        I[g] = I[m];
-                                        I[m] = 0;
+                                        board[g] = board[m];
+                                        board[m] = 0;
                                     } else if (g) {
-                                        I[g] = 0;
+                                        board[g] = 0;
                                     }
-                                    I[O] = 0;
+                                    board[O] = 0;
                                     // find opponent's best move
                                     J = (q | C<3) ? 0 : p;
                                     L -= X((s > h | d) ? 0 : p,
@@ -182,13 +183,13 @@ function X(w,c,h,e,S,s) {
                                     // is castling possible?
                                     J = (q-1 | C>1) || m || (!s | d | r | o<z) || X(0,0,0,21,0,0) > M;
                                     // undo move
-                                    I[O] = o;
-                                    I[p] = r;
+                                    board[O] = o;
+                                    board[p] = r;
                                     if (m) {
-                                        I[m] = I[g];
-                                        I[g] = 0;
+                                        board[m] = board[g];
+                                        board[g] = 0;
                                     } else if (g) {
-                                        I[g] = 9 ^ y;
+                                        board[g] = 9 ^ y;
                                     }
                                 }
                                 // if current move has better heuristic
@@ -213,7 +214,7 @@ function X(w,c,h,e,S,s) {
                                 // try castling if J == 0
                                 n += J || (g = p,
                                            m = (p < O) ? g-3 : g+2,
-                                           (I[m] < z | I[m+O-p]) || I[p+=p-O]) ? 1 : 0;
+                                           (board[m] < z | board[m+O-p]) || board[p+=p-O]) ? 1 : 0;
                             }
                         }
                     }
@@ -244,13 +245,13 @@ function SetupChessboard() {
         for (x=0; x<10; x++) {
             if (x<1 || y<2 || x>8 || y>9) {
                 // outside
-                I[y*10+x] = 7;
+                board[y*10+x] = 7;
             } else if (y>=4 && y<=7) {
                 // empty
-                I[y*10+x] = 0;
+                board[y*10+x] = 0;
             } else {
                 // pieces
-                I[y*10+x] = initial[i++] | 16;
+                board[y*10+x] = initial[i++] | 16;
             }
         }
     }
@@ -281,7 +282,7 @@ function DrawPieces() {
     B=b;
     for (p=21; p<99; ++p) {
         if (q = document.getElementById("o" + p)) {
-            q.innerHTML = pieces.charAt(I[p] & 15);
+            q.innerHTML = pieces.charAt(board[p] & 15);
             q.style.borderColor = (p == B) ? "red" : "#dde";
         }
     }
@@ -292,7 +293,7 @@ var clickLock = false;
 function OnClick(s) {
     if (clickLock)
         return;
-    i = (I[s] ^ y) & z;
+    i = (board[s] ^ y) & z;
     if (i > 8) {
         // clicked on the own piece
         b = s;
@@ -300,7 +301,7 @@ function OnClick(s) {
     } else if (B && i<9) {
         // clicked on the opponent piece or empty space
         b = s;
-        i = I[B] & z;
+        i = board[B] & z;
         // pawn promotion
         if ((i & 7) == 1 & (b < 29 | b > 90))
             i = 14 - document.getElementById("t").selectedIndex ^ y;
